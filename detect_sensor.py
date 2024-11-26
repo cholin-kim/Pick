@@ -15,6 +15,9 @@ class Detect_Sensor():
         image_topic = "/camera/color/image_raw"
         self.distCoeffs = distCoeffs
         self.camMatrix = camMatrix
+        # rectangle information defined by aruco markers as 4 corners
+        self.w = 0.07
+        self.h = 0.07
 
 
         ## Utils ##
@@ -61,7 +64,7 @@ class Detect_Sensor():
 
         aruco_poses = np.zeros((4, 6))
         for i in range(len(self.ids)):
-            rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(self.corners[i], 0.06, self.camMatrix, self.distCoeffs)
+            rvec, tvec, markerPoints = cv2.aruco.estimatePoseSingleMarkers(self.corners[i], 0.06, self.camMatrix, self.distCoeffs)  # marker length
             pos_x, pos_y, pos_z = tvec[0][0][0], tvec[0][0][1], tvec[0][0][2]
             rot_x, rot_y, rot_z = rvec[0][0][0], rvec[0][0][1], rvec[0][0][2]
             # [[quat_x, quat_y, quat_z, quat_w]] = R.from_rotvec(rvec.reshape(1, 3)).as_quat()
@@ -77,11 +80,38 @@ class Detect_Sensor():
             cv2.aruco.drawDetectedMarkers(self.frame, self.corners)
             cv2.imshow("visualize_detected_aruco")
 
-        found_id = np.argwhere(np.sum(aruco_poses, axis=1)!= 0)
-        # if len(found_id) >= 3:
-        #     sensor_pose =
+        found_id = np.where((np.sum(aruco_poses, axis=1)!= 0).ravel())
+        # found_id_modf = found_id % 2
+        # sensor_pos = np.zeros(6)
+
+        # position
+        # sensor_pos[2] = np.mean(aruco_poses[found_id, 2])
+        center_pos_cand = []
+        for id in found_id:
+            center_pos_cand.append(self.center_cand(aruco_poses[id][:3]))
+        center_pos = np.mean(np.array(center_pos_cand), axis=0)
+
+        # orientation
+        
+
+
+
+
+
+
+
 
         return sensor_pose
+
+    def center_cand(self, pos, id):
+        if (id % 4) == 0:
+            return np.array([pos[0] + self.w/2, pos[1] - self.w/2, pos[2]])
+        elif (id % 4) == 1:
+            return np.array([pos[0] - self.w/2, pos[1] - self.w/2, pos[2]])
+        elif (id % 4) == 2:
+            return np.array([pos[0] + self.w/2, pos[1] + self.w/2, pos[2]])
+        elif (id % 4) == 3:
+            return np.array([pos[0] - self.w/2, pos[1] + self.w/2, pos[2]])
 
 
 
