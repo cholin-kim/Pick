@@ -1,0 +1,16 @@
+[Left gripper]
+ID 1 (WRIST): 2730(UP, 90), 1834(NEUTRAL, 0), 813(DOWN, -90)
+ID 2 (JAW L): 3500(LEFT, 80), 2740(NEUTRAL, 0), 1963(RIGHT, -80)
+ID 3 (JAW R): 3774(LEFT, 80), 2728(NEUTRAL, 0), 2120(RIGHT, -80)
+
+[Right gripper]
+ID 4 (WRIST): 3000(UP, 90), 2018(NEUTRAL, 0), 1036(DOWN, -90)
+ID 5 (JAW L): 2000(LEFT, 80), 1200(NEUTRAL, 0), 418(RIGHT, -80)
+ID 6 (JAW R): 2707(LEFT, 80), 1843(NEUTRAL, 0), 1056(RIGHT, -80)
+
+
+슬릿 거동
+Cable length at neutral  = 0.6 mm (0 deg)
+Cable length at max. bending = 0.2 mm (6.38 deg) (sim)  --> delta L = 0.4 mm
+Cable length at max. bending = 0.18 mm (6.88 deg) (cal) --> delta L = 0.42 mm
+총 slit 개수 = 16개
